@@ -45,7 +45,8 @@ LOCAL_APPS = [
     "apps",
     "layouts",
     "components",
-    "pages"
+    "pages",
+    "cadastros",
     ]
 THIRDPARTY_APPS = [
     

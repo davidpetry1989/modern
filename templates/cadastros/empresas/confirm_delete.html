@@ -1,0 +1,21 @@
+{% extends "partials/base.html" %}
+{% block title %}Excluir Empresa{% endblock title %}
+{% block content %}
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+      {% block pagetitle %}{% include "partials/page-title.html" with pagetitle="Cadastros" title="Excluir Empresa" %}{% endblock pagetitle %}
+      <div class="card">
+        <div class="card-body">
+          <p>Confirma a exclusão de {{ object }}?</p>
+          <form method="post">
+            {% csrf_token %}
+            <a href="{% url 'cadastros:empresas_lista' %}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-danger">Excluir</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
