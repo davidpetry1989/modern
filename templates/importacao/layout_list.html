@@ -1,0 +1,31 @@
+{% extends 'partials/base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Layouts de Importação</h4>
+        <a href="{% url 'importacao:layout_add' %}" class="btn btn-sm btn-primary mb-3">Novo Layout</a>
+        <table class="table table-striped">
+          <thead>
+            <tr><th>Nome</th><th>Origem</th><th>Tipo</th><th>Ações</th></tr>
+          </thead>
+          <tbody>
+            {% for layout in layouts %}
+            <tr>
+              <td>{{ layout.nome }}</td>
+              <td>{{ layout.origem_sistema }}</td>
+              <td>{{ layout.tipo_arquivo }}</td>
+              <td><a href="{% url 'importacao:layout_edit' layout.pk %}" class="btn btn-sm btn-secondary">Editar</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Nenhum layout cadastrado.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a href="{% url 'importacao:wizard' %}" class="btn btn-success">Iniciar Importação</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1107,7 +1107,22 @@
                                 </ul>
                             </div>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="#sidebarDepara" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDepara"><i class="ri-shuffle-line me-2"></i>Importações (De/Para)</a>
+                            <div class="collapse menu-dropdown" id="sidebarDepara">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item"><a href="{% url 'importacao:wizard' %}" class="nav-link">Wizard</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_contas_lista' %}" class="nav-link">De/Para – Plano de Contas</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_centros_lista' %}" class="nav-link">De/Para – Centro de Custo</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_empresas_lista' %}" class="nav-link">De/Para – Empresa</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_filiais_lista' %}" class="nav-link">De/Para – Filial</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_projetos_lista' %}" class="nav-link">De/Para – Projeto</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_moedas_lista' %}" class="nav-link">De/Para – Moeda</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_historicos_lista' %}" class="nav-link">De/Para – Históricos Padrão</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_parceiros_lista' %}" class="nav-link">De/Para – Parceiro de Negócios</a></li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <!-- Sidebar -->

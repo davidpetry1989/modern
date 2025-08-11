@@ -48,6 +48,7 @@ LOCAL_APPS = [
     "pages",
     "cadastros",
     "contabill",
+    "importacao",
     ]
 THIRDPARTY_APPS = [
     

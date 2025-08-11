@@ -35,6 +35,8 @@ urlpatterns = [
     # Cadastros
     path('cadastros/', include('cadastros.urls')),
     path('contabill/', include('contabill.urls')),
+    path('importacao/', include('importacao.urls')),
+
     path(
         "account/password/change/",
         login_required(MyPasswordChangeView.as_view()),

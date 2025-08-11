@@ -1,0 +1,14 @@
+{% extends 'partials/base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Resumo da Importação</h4>
+        <p>Criados: {{ created }} | Atualizados: {{ updated }} | Ignorados: {{ ignored }}</p>
+        <a href="{% url 'importacao:depara_list' target %}" class="btn btn-success">Voltar à lista</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

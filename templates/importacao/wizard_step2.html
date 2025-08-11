@@ -1,0 +1,32 @@
+{% extends 'partials/base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Passo 2 - Pré-visualização</h4>
+        <form method="post">{% csrf_token %}
+        <div class="table-responsive">
+        <table class="table table-sm table-striped">
+          <thead><tr><th></th><th>Código Externo</th><th>Descrição</th><th>Destino</th></tr></thead>
+          <tbody>
+          {% for row in rows %}
+            <tr>
+              <td>
+                {% if row.target_id %}<input type="checkbox" name="linhas" value="{{ forloop.counter0 }}" checked>{% endif %}
+              </td>
+              <td>{{ row.codigo_externo }}</td>
+              <td>{{ row.descricao_externa }}</td>
+              <td>{% if row.destino %}{{ row.destino }}{% else %}<span class="text-danger">Não encontrado</span>{% endif %}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        </div>
+        <button type="submit" class="btn btn-primary">Aplicar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
