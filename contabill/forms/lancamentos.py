@@ -1,6 +1,7 @@
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, BaseInlineFormSet
 
 from ..models import (
@@ -9,6 +10,8 @@ from ..models import (
     RateioLancamentoItemCentroCusto,
     RateioLancamentoItemProjeto,
 )
+
+TOL = Decimal("0.00")
 
 
 class LancamentoContabilForm(forms.ModelForm):
@@ -40,7 +43,21 @@ class LancamentoContabilForm(forms.ModelForm):
         }
 
 
+class ValorField(forms.DecimalField):
+    def to_python(self, value):
+        if value in self.empty_values:
+            return None
+        if isinstance(value, str):
+            value = value.replace(".", "").replace(",", ".")
+        try:
+            return super().to_python(value)
+        except InvalidOperation:
+            raise ValidationError("Informe um número válido.")
+
+
 class LancamentoItemForm(forms.ModelForm):
+    valor = ValorField(max_digits=18, decimal_places=2, widget=forms.TextInput(attrs={"class": "form-control"}))
+
     class Meta:
         model = LancamentoItem
         fields = [
@@ -58,44 +75,38 @@ class LancamentoItemForm(forms.ModelForm):
             "filial": forms.Select(attrs={"class": "form-select"}),
             "moeda": forms.Select(attrs={"class": "form-select"}),
             "codigo_externo": forms.TextInput(attrs={"class": "form-control"}),
-            "valor": forms.NumberInput(attrs={"class": "form-control"}),
             "tipo_dc": forms.Select(attrs={"class": "form-select"}),
             "historico": forms.Select(attrs={"class": "form-select"}),
             "status": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
 
 
-class BaseLancamentoItemFormSet(BaseInlineFormSet):
+class LancamentoItemBaseFormSet(BaseInlineFormSet):
     def clean(self):
-        """Permite inclusão incremental de itens.
-
-        O balanceamento de débitos e créditos é validado no
-        momento da gravação do lançamento completo, através do método
-        ``LancamentoContabil.validar``. Aqui executamos apenas a limpeza
-        padrão para não bloquear a adição de novas linhas enquanto o
-        total de débitos e créditos ainda não estiver fechado."""
-
-
         super().clean()
         total_d = Decimal("0.00")
         total_c = Decimal("0.00")
         for form in self.forms:
-            if not hasattr(form, "cleaned_data") or form.cleaned_data.get("DELETE"):
+            if not hasattr(form, "cleaned_data"):
                 continue
-            valor = form.cleaned_data.get("valor") or Decimal("0.00")
-            if form.cleaned_data.get("tipo_dc") == "D":
+            cd = form.cleaned_data
+            if cd.get("DELETE"):
+                continue
+            valor = cd.get("valor") or Decimal("0.00")
+            tipo = cd.get("tipo_dc")
+            if tipo == "D":
                 total_d += valor
-            else:
+            elif tipo == "C":
                 total_c += valor
-        if total_d.quantize(Decimal("0.01")) != total_c.quantize(Decimal("0.01")):
-            raise forms.ValidationError("Débitos e créditos não estão balanceados")
+        if (total_d - total_c).quantize(TOL) != Decimal("0.00"):
+            raise ValidationError("Débitos e créditos não estão balanceados.")
 
 
 LancamentoItemFormSet = inlineformset_factory(
     LancamentoContabil,
     LancamentoItem,
     form=LancamentoItemForm,
-    formset=BaseLancamentoItemFormSet,
+    formset=LancamentoItemBaseFormSet,
     extra=1,
     can_delete=True,
 )

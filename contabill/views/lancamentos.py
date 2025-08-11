@@ -27,9 +27,9 @@ class LancamentoContabilCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         if self.request.POST:
-            ctx["itens_formset"] = LancamentoItemFormSet(self.request.POST, instance=self.object)
+            ctx["itens_formset"] = LancamentoItemFormSet(self.request.POST, instance=self.object, prefix="itens")
         else:
-            ctx["itens_formset"] = LancamentoItemFormSet(instance=self.object)
+            ctx["itens_formset"] = LancamentoItemFormSet(instance=self.object, prefix="itens")
         return ctx
 
     def form_valid(self, form):
