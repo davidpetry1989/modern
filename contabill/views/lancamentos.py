@@ -47,6 +47,7 @@ class LancamentoContabilCreateView(LoginRequiredMixin, CreateView):
                 form.add_error(None, exc)
                 transaction.set_rollback(True)
                 return self.form_invalid(form)
+            self.object.validar()
         messages.success(self.request, "Lançamento salvo com sucesso.")
         return super().form_valid(form)
 

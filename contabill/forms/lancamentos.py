@@ -75,7 +75,20 @@ class BaseLancamentoItemFormSet(BaseInlineFormSet):
         padrão para não bloquear a adição de novas linhas enquanto o
         total de débitos e créditos ainda não estiver fechado."""
 
+
         super().clean()
+        total_d = Decimal("0.00")
+        total_c = Decimal("0.00")
+        for form in self.forms:
+            if not hasattr(form, "cleaned_data") or form.cleaned_data.get("DELETE"):
+                continue
+            valor = form.cleaned_data.get("valor") or Decimal("0.00")
+            if form.cleaned_data.get("tipo_dc") == "D":
+                total_d += valor
+            else:
+                total_c += valor
+        if total_d.quantize(Decimal("0.01")) != total_c.quantize(Decimal("0.01")):
+            raise forms.ValidationError("Débitos e créditos não estão balanceados")
 
 
 LancamentoItemFormSet = inlineformset_factory(

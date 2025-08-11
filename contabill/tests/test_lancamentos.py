@@ -214,3 +214,4 @@ class LancamentoTests(TestCase):
         )
         lanc.validar()
 
+
