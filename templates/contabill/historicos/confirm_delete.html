@@ -1,0 +1,13 @@
+{% extends "partials/base.html" %}
+{% block title %}Excluir Histórico{% endblock title %}
+{% block content %}
+<div class="main-content"><div class="page-content"><div class="container-fluid">
+{% include "partials/page-title.html" with pagetitle="Financeiro" title="Excluir Histórico" %}
+<div class="card"><div class="card-body">
+<form method="post">{% csrf_token %}
+<p>Confirma a exclusão de {{ object }}?</p>
+<button type="submit" class="btn btn-danger">Excluir</button>
+<a href="{% url 'contabill:historicos_lista' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+</div></div></div></div></div>
+{% endblock content %}

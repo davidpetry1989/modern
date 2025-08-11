@@ -1,0 +1,15 @@
+{% extends "partials/base.html" %}
+{% block title %}Conta Contábil{% endblock title %}
+{% block content %}
+<div class="main-content"><div class="page-content"><div class="container-fluid">
+{% include "partials/page-title.html" with pagetitle="Financeiro" title="Conta Contábil" %}
+<div class="card"><div class="card-body">
+<form method="post">{% csrf_token %}
+{% for field in form %}
+<div class="mb-3">{{ field.label_tag }}{{ field }}{% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}{% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}</div>
+{% endfor %}
+<button type="submit" class="btn btn-success">Salvar</button>
+<a href="{% url 'contabill:contas_lista' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+</div></div></div></div></div>
+{% endblock content %}

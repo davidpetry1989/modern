@@ -104,6 +104,11 @@
                 {% for error in form.site.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
               </div>
 
+              <div class="col-md-4">
+                {{ form.grupo_empresarial.label_tag }}{{ form.grupo_empresarial }}
+                {% for error in form.grupo_empresarial.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
               <div class="col-md-2">
                 <div class="form-check mt-4">
                   {{ form.ativo }}
