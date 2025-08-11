@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from datetime import date
 
 from cadastros.models import Empresa
-from .models import (
+from ..models import (
     ContaContabil,
     Projeto,
     Periodo,

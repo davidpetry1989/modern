@@ -266,3 +266,15 @@ class Periodo(BaseModel):
         if self.data_fim and self.data_inicio and self.data_fim < self.data_inicio:
             raise ValidationError({"data_fim": "Data fim deve ser maior ou igual ao início."})
 
+
+# Importa modelos de lançamentos
+from .lancamentos import (
+    LancamentoContabil,
+    LancamentoItem,
+    RateioLancamentoItemCentroCusto,
+    RateioLancamentoItemProjeto,
+    SaldoContaPeriodo,
+    SaldoCentroCustoPeriodo,
+    SaldoProjetoPeriodo,
+)
+
