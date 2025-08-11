@@ -51,7 +51,16 @@ class PessoaJuridicaBase(models.Model):
 
 
 class Empresa(PessoaJuridicaBase):
-    pass
+    grupo_empresarial = models.ForeignKey(
+        "contabill.GrupoEmpresarial",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="empresas",
+    )
+
+    class Meta(PessoaJuridicaBase.Meta):
+        indexes = PessoaJuridicaBase.Meta.indexes + [models.Index(fields=["grupo_empresarial"])]
 
 
 class Parceiro(PessoaJuridicaBase):

@@ -1068,10 +1068,41 @@
                             <div class="collapse menu-dropdown" id="sidebarCadastros">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{% url 'cadastros:empresas_lista' %}" class="nav-link" data-key="t-empresas">Empresas</a>
+                                        <a href="{% url 'contabill:grupos_lista' %}" class="nav-link"><i class="ri-community-line me-2"></i>Grupo Empresarial</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'cadastros:parceiros_lista' %}" class="nav-link" data-key="t-parceiros">Parceiros de Negócios</a>
+                                        <a href="{% url 'cadastros:empresas_lista' %}" class="nav-link"><i class="ri-building-4-line me-2"></i>Empresa</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'contabill:filiais_lista' %}" class="nav-link"><i class="ri-git-branch-line me-2"></i>Filial</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'contabill:moedas_lista' %}" class="nav-link"><i class="ri-money-dollar-circle-line me-2"></i>Moeda</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarContab" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarContab">
+                                <i class="ri-file-list-3-line"></i> <span data-key="t-contabilidade">Contabilidade</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarContab">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{% url 'contabill:contas_lista' %}" class="nav-link"><i class="ri-file-list-3-line me-2"></i>Plano de Contas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'contabill:centros_lista' %}" class="nav-link"><i class="ri-flow-chart me-2"></i>Centro de Custo</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'contabill:projetos_lista' %}" class="nav-link"><i class="ri-briefcase-4-line me-2"></i>Projeto</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'contabill:historicos_lista' %}" class="nav-link"><i class="ri-draft-line me-2"></i>Históricos Padrão</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'contabill:periodos_lista' %}" class="nav-link"><i class="ri-calendar-2-line me-2"></i>Período</a>
                                     </li>
                                 </ul>
                             </div>

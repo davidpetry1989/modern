@@ -47,6 +47,7 @@ LOCAL_APPS = [
     "components",
     "pages",
     "cadastros",
+    "contabill",
     ]
 THIRDPARTY_APPS = [
     

@@ -1,5 +1,6 @@
 from django import forms
 from .models import Empresa, Parceiro
+from contabill.models import GrupoEmpresarial
 import re
 
 
@@ -28,7 +29,7 @@ class EmpresaForm(forms.ModelForm):
         fields = [
             "razao_social", "nome_fantasia", "cnpj", "ie", "im",
             "endereco", "numero", "complemento", "bairro", "cidade", "estado", "cep",
-            "telefone", "email", "site", "ativo",
+            "telefone", "email", "site", "grupo_empresarial", "ativo",
         ]
         widgets = {
             field: forms.TextInput(attrs={"class": "form-control"})
@@ -37,7 +38,11 @@ class EmpresaForm(forms.ModelForm):
                 "numero", "complemento", "bairro", "cidade", "cep", "telefone", "email", "site"
             ]
         }
-        widgets.update({"estado": forms.Select(attrs={"class": "form-select"}), "ativo": forms.CheckboxInput(attrs={"class": "form-check-input"})})
+        widgets.update({
+            "estado": forms.Select(attrs={"class": "form-select"}),
+            "grupo_empresarial": forms.Select(attrs={"class": "form-select"}),
+            "ativo": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+        })
 
     def clean_cnpj(self):
         cnpj = self.cleaned_data.get("cnpj", "")
@@ -49,7 +54,8 @@ class EmpresaForm(forms.ModelForm):
 class ParceiroForm(EmpresaForm):
     class Meta(EmpresaForm.Meta):
         model = Parceiro
-        fields = EmpresaForm.Meta.fields + [
+        base_fields = [f for f in EmpresaForm.Meta.fields if f != "grupo_empresarial"]
+        fields = base_fields + [
             "is_cliente", "is_fornecedor", "is_transportadora", "is_contador"
         ]
         widgets = EmpresaForm.Meta.widgets.copy()
