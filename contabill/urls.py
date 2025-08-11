@@ -34,6 +34,13 @@ from .views import (
     PeriodoUpdateView,
     PeriodoDeleteView,
 )
+from .views.lancamentos import (
+    LancamentoContabilListView,
+    LancamentoContabilCreateView,
+    LancamentoContabilUpdateView,
+    LancamentoContabilDeleteView,
+    RecalcularSaldoView,
+)
 
 app_name = "contabill"
 
@@ -77,4 +84,22 @@ urlpatterns = [
     path("periodos/novo/", PeriodoCreateView.as_view(), name="periodos_criar"),
     path("periodos/<int:pk>/editar/", PeriodoUpdateView.as_view(), name="periodos_editar"),
     path("periodos/<int:pk>/excluir/", PeriodoDeleteView.as_view(), name="periodos_excluir"),
+
+    path("lancamentos/", LancamentoContabilListView.as_view(), name="lancamentos_lista"),
+    path("lancamentos/novo/", LancamentoContabilCreateView.as_view(), name="lancamentos_novo"),
+    path(
+        "lancamentos/<int:pk>/editar/",
+        LancamentoContabilUpdateView.as_view(),
+        name="lancamentos_editar",
+    ),
+    path(
+        "lancamentos/<int:pk>/excluir/",
+        LancamentoContabilDeleteView.as_view(),
+        name="lancamentos_excluir",
+    ),
+    path(
+        "lancamentos/recalcular-saldo/",
+        RecalcularSaldoView.as_view(),
+        name="lancamentos_recalcular_saldo",
+    ),
 ]
