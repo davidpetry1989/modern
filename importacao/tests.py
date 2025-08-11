@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 from .models import LayoutImportacao, DePara
 from .services import bulk_upsert, resolver, get_ct_for_model
+from .forms import depara_form_factory
 from contabill.models import ContaContabil, CentroCusto
 
 
@@ -59,6 +60,22 @@ class DeParaServiceTests(TestCase):
                 target_id=self.conta.id,
                 codigo_externo="dup",
             )
+
+    def test_manual_form_creation(self):
+        form_class = depara_form_factory(ContaContabil)
+        form = form_class(
+            data={
+                "layout": self.layout.id,
+                "codigo_externo": "manual",
+                "descricao_externa": "Manual",
+                "observacao": "",
+                "target": self.conta.id,
+                "ativo": True,
+            }
+        )
+        self.assertTrue(form.is_valid())
+        obj = form.save()
+        self.assertEqual(obj.target_id, self.conta.id)
 
 
 class WizardFlowTests(TestCase):

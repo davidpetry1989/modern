@@ -1,14 +1,80 @@
-{% extends 'partials/base.html' %}
+{% extends "partials/base.html" %}
+{% load static %}
+{% block title %}Layout de Importação{% endblock title %}
 {% block content %}
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <form method="post">{% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit" class="btn btn-primary">Salvar</button>
-        </form>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+
+      {% block pagetitle %}
+        {% include "partials/page-title.html" with pagetitle="Importações" title="Layout de Importação" %}
+      {% endblock pagetitle %}
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="card">
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+            {% if form.errors %}
+              <div class="alert alert-danger">Corrija os campos em destaque.</div>
+            {% endif %}
+
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                {{ form.nome.label_tag }}{{ form.nome }}
+                {% for error in form.nome.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-4">
+                {{ form.origem_sistema.label_tag }}{{ form.origem_sistema }}
+                {% for error in form.origem_sistema.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-2">
+                {{ form.ativo }}
+                <label class="form-check-label ms-1" for="{{ form.ativo.id_for_label }}">{{ form.ativo.label }}</label>
+                {% for error in form.ativo.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-12">
+                {{ form.descricao.label_tag }}{{ form.descricao }}
+                {% for error in form.descricao.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-4">
+                {{ form.tipo_arquivo.label_tag }}{{ form.tipo_arquivo }}
+                {% for error in form.tipo_arquivo.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-2">
+                {{ form.delimitador.label_tag }}{{ form.delimitador }}
+                {% for error in form.delimitador.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+            </div>
+
+            <div class="mt-3">
+              <button type="submit" class="btn btn-success">Salvar</button>
+              <a href="{% url 'importacao:layout_list' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+
+          </form>
+        </div>
       </div>
+
     </div>
   </div>
 </div>

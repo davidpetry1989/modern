@@ -25,5 +25,15 @@ urlpatterns = [
     path("depara/moedas/", views.DeParaListView.as_view(), {"target": "moedas"}, name="depara_moedas_lista"),
     path("depara/historicos/", views.DeParaListView.as_view(), {"target": "historicos"}, name="depara_historicos_lista"),
     path("depara/parceiros/", views.DeParaListView.as_view(), {"target": "parceiros"}, name="depara_parceiros_lista"),
+    path(
+        "depara/<str:target>/novo/",
+        views.DeParaCreateView.as_view(),
+        name="depara_add",
+    ),
+    path(
+        "depara/<str:target>/<int:pk>/editar/",
+        views.DeParaUpdateView.as_view(),
+        name="depara_edit",
+    ),
     path("depara/<str:target>/", views.DeParaListView.as_view(), name="depara_list"),
 ]

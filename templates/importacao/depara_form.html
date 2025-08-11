@@ -1,0 +1,80 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block title %}De/Para — {{ target_label }}{% endblock title %}
+{% block content %}
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+
+      {% with titulo="De/Para — "|add:target_label %}
+        {% include "partials/page-title.html" with pagetitle="Importações" title=titulo %}
+      {% endwith %}
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="card">
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+            {% if form.errors %}
+              <div class="alert alert-danger">Corrija os campos em destaque.</div>
+            {% endif %}
+
+            <div class="row g-3">
+              <div class="col-md-4">
+                {{ form.layout.label_tag }}{{ form.layout }}
+                {% for error in form.layout.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-4">
+                {{ form.codigo_externo.label_tag }}{{ form.codigo_externo }}
+                {% for error in form.codigo_externo.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-4">
+                {{ form.descricao_externa.label_tag }}{{ form.descricao_externa }}
+                {% for error in form.descricao_externa.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-8">
+                {{ form.observacao.label_tag }}{{ form.observacao }}
+                {% for error in form.observacao.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-4">
+                {{ form.target.label_tag }}{{ form.target }}
+                {% for error in form.target.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-2">
+                <div class="form-check mt-4">
+                  {{ form.ativo }}
+                  <label class="form-check-label" for="{{ form.ativo.id_for_label }}">{{ form.ativo.label }}</label>
+                </div>
+                {% for error in form.ativo.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <button type="submit" class="btn btn-success">Salvar</button>
+              <a href="{% url 'importacao:depara_list' target %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock content %}

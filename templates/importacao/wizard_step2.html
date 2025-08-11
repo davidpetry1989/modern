@@ -1,31 +1,80 @@
-{% extends 'partials/base.html' %}
+{% extends "partials/base.html" %}
+{% load static %}
+{% block title %}Importações — Passo 2{% endblock title %}
 {% block content %}
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Passo 2 - Pré-visualização</h4>
-        <form method="post">{% csrf_token %}
-        <div class="table-responsive">
-        <table class="table table-sm table-striped">
-          <thead><tr><th></th><th>Código Externo</th><th>Descrição</th><th>Destino</th></tr></thead>
-          <tbody>
-          {% for row in rows %}
-            <tr>
-              <td>
-                {% if row.target_id %}<input type="checkbox" name="linhas" value="{{ forloop.counter0 }}" checked>{% endif %}
-              </td>
-              <td>{{ row.codigo_externo }}</td>
-              <td>{{ row.descricao_externa }}</td>
-              <td>{% if row.destino %}{{ row.destino }}{% else %}<span class="text-danger">Não encontrado</span>{% endif %}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+
+      {% block pagetitle %}{% include "partials/page-title.html" with pagetitle="Importações" title="Wizard — Passo 2: Pré-visualização" %}{% endblock pagetitle %}
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="card">
+        <div class="card-body">
+
+          <ul class="nav nav-pills nav-justified mb-4">
+            <li class="nav-item"><span class="nav-link">1. Layout</span></li>
+            <li class="nav-item"><span class="nav-link active">2. Prévia</span></li>
+            <li class="nav-item"><span class="nav-link disabled">3. Aplicar</span></li>
+          </ul>
+
+          <p class="text-muted mb-3">
+            Apenas linhas com <strong>Destino</strong> encontrado vêm marcadas. Você pode desmarcar o que não quiser aplicar.
+          </p>
+
+          {# templates/importacao/wizard_step2.html #}
+          <form method="post">{% csrf_token %}
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="table-responsive">
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr><th></th><th>Código Externo</th><th>Descrição</th><th>Destino</th></tr>
+                </thead>
+                <tbody>
+                {% for row in rows %}
+                  <tr>
+                    <td>
+                      {% if row.target_id %}
+                        <input type="checkbox" name="linhas" value="{{ forloop.counter0 }}" checked>
+                      {% endif %}
+                    </td>
+                    <td>{{ row.codigo_externo }}</td>
+                    <td>{{ row.descricao_externa }}</td>
+                    <td>
+                      {% if row.destino %}{{ row.destino }}{% else %}
+                        <span class="text-danger">Não encontrado</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <a href="{% url 'importacao:wizard' %}" class="btn btn-light">Voltar</a>
+            <button type="submit" class="btn btn-primary" {% if not tem_candidatos %}disabled{% endif %}>
+              Aplicar
+            </button>
+            {% if not tem_candidatos %}
+              <p class="text-muted mt-2">Nenhuma linha com destino encontrado. Volte e ajuste o arquivo.</p>
+            {% endif %}
+          </form>
+
+
         </div>
-        <button type="submit" class="btn btn-primary">Aplicar</button>
-        </form>
       </div>
+
     </div>
   </div>
 </div>

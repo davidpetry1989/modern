@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from urllib.parse import urlencode
 
 from .models import (
     ContaContabil,
@@ -34,9 +35,21 @@ class ContaContabilListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
+
+        # filtros específicos
+        codigo = self.request.GET.get("codigo")
+        descricao = self.request.GET.get("descricao")
+        if codigo:
+            qs = qs.filter(codigo__icontains=codigo)
+        if descricao:
+            qs = qs.filter(descricao__icontains=descricao)
+
+        # busca livre (continua valendo)
         q = self.request.GET.get("q")
         if q:
             qs = qs.filter(Q(codigo__icontains=q) | Q(descricao__icontains=q))
+
+        # demais filtros já existentes
         filters = {
             "tipo": self.request.GET.get("tipo"),
             "natureza": self.request.GET.get("natureza"),
@@ -45,9 +58,19 @@ class ContaContabilListView(LoginRequiredMixin, ListView):
             "nivel": self.request.GET.get("nivel"),
         }
         for field, value in filters.items():
-            if value:
+            if value not in (None, ""):
                 qs = qs.filter(**{field: value})
+
         return qs
+
+    # (opcional) preservar filtros na paginação
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        params = self.request.GET.copy()
+        params.pop("page", None)
+        ctx["querystring"] = urlencode(params)
+        return ctx
+
 
 
 class ContaContabilCreateView(LoginRequiredMixin, CreateView):

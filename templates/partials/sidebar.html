@@ -1063,7 +1063,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarCadastros" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCadastros">
-                                <i class="ri-building-4-line"></i> <span data-key="t-cadastros">Cadastros</span>
+                                <i class="ri-building-4-line"></i> <span data-key="t-cadastros">Cadastros Gerais</span>
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarCadastros">
                                 <ul class="nav nav-sm flex-column">
@@ -1085,7 +1085,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarContab" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarContab">
-                                <i class="ri-file-list-3-line"></i> <span data-key="t-contabilidade">Contabilidade</span>
+                                <i class="ri-file-list-3-line"></i> <span data-key="t-contabilidade">Cadastros Contábeis</span>
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarContab">
                                 <ul class="nav nav-sm flex-column">
@@ -1108,7 +1108,9 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#sidebarDepara" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDepara"><i class="ri-shuffle-line me-2"></i>Importações (De/Para)</a>
+                            <a class="nav-link menu-link" href="#sidebarDepara" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDepara">
+                                <i class="ri-shuffle-line me-2"></i> <span data-key="t-importacoes">Importações</span>
+                            </a>
                             <div class="collapse menu-dropdown" id="sidebarDepara">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item"><a href="{% url 'importacao:wizard' %}" class="nav-link">Wizard</a></li>
@@ -1118,11 +1120,12 @@
                                     <li class="nav-item"><a href="{% url 'importacao:depara_filiais_lista' %}" class="nav-link">De/Para – Filial</a></li>
                                     <li class="nav-item"><a href="{% url 'importacao:depara_projetos_lista' %}" class="nav-link">De/Para – Projeto</a></li>
                                     <li class="nav-item"><a href="{% url 'importacao:depara_moedas_lista' %}" class="nav-link">De/Para – Moeda</a></li>
-                                    <li class="nav-item"><a href="{% url 'importacao:depara_historicos_lista' %}" class="nav-link">De/Para – Históricos Padrão</a></li>
-                                    <li class="nav-item"><a href="{% url 'importacao:depara_parceiros_lista' %}" class="nav-link">De/Para – Parceiro de Negócios</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_historicos_lista' %}" class="nav-link">De/Para – Históricos</a></li>
+                                    <li class="nav-item"><a href="{% url 'importacao:depara_parceiros_lista' %}" class="nav-link">De/Para – Parceiros</a></li>
                                 </ul>
                             </div>
                         </li>
+                        
                     </ul>
                 </div>
                 <!-- Sidebar -->
