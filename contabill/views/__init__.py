@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from urllib.parse import urlencode
 
-from .models import (
+from ..models import (
     ContaContabil,
     CentroCusto,
     GrupoEmpresarial,
@@ -15,7 +15,7 @@ from .models import (
     HistoricoPadrao,
     Periodo,
 )
-from .forms import (
+from ..forms import (
     ContaContabilForm,
     CentroCustoForm,
     GrupoEmpresarialForm,
