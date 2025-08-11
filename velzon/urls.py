@@ -32,6 +32,8 @@ urlpatterns = [
     path('components/',include('components.urls')),
     # Pages
     path('pages/',include('pages.urls')),
+    # Cadastros
+    path('cadastros/', include('cadastros.urls')),
     path(
         "account/password/change/",
         login_required(MyPasswordChangeView.as_view()),
@@ -48,4 +50,4 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

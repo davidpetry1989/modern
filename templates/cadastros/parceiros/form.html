@@ -1,0 +1,53 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block title %}Parceiro{% endblock title %}
+{% block content %}
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+      {% block pagetitle %}{% include "partials/page-title.html" with pagetitle="Cadastros" title="Parceiro" %}{% endblock pagetitle %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <div class="card">
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">{{ form.razao_social.label_tag }}{{ form.razao_social }}</div>
+              <div class="col-md-6">{{ form.nome_fantasia.label_tag }}{{ form.nome_fantasia }}</div>
+              <div class="col-md-4">{{ form.cnpj.label_tag }}{{ form.cnpj }}</div>
+              <div class="col-md-4">{{ form.ie.label_tag }}{{ form.ie }}</div>
+              <div class="col-md-4">{{ form.im.label_tag }}{{ form.im }}</div>
+              <div class="col-md-6">{{ form.endereco.label_tag }}{{ form.endereco }}</div>
+              <div class="col-md-2">{{ form.numero.label_tag }}{{ form.numero }}</div>
+              <div class="col-md-4">{{ form.complemento.label_tag }}{{ form.complemento }}</div>
+              <div class="col-md-4">{{ form.bairro.label_tag }}{{ form.bairro }}</div>
+              <div class="col-md-4">{{ form.cidade.label_tag }}{{ form.cidade }}</div>
+              <div class="col-md-2">{{ form.estado.label_tag }}{{ form.estado }}</div>
+              <div class="col-md-2">{{ form.cep.label_tag }}{{ form.cep }}</div>
+              <div class="col-md-4">{{ form.telefone.label_tag }}{{ form.telefone }}</div>
+              <div class="col-md-4">{{ form.email.label_tag }}{{ form.email }}</div>
+              <div class="col-md-4">{{ form.site.label_tag }}{{ form.site }}</div>
+              <div class="col-md-2 form-check">{{ form.ativo }} {{ form.ativo.label_tag }}</div>
+              <div class="col-md-2 form-check">{{ form.is_cliente }} {{ form.is_cliente.label_tag }}</div>
+              <div class="col-md-2 form-check">{{ form.is_fornecedor }} {{ form.is_fornecedor.label_tag }}</div>
+              <div class="col-md-3 form-check">{{ form.is_transportadora }} {{ form.is_transportadora.label_tag }}</div>
+              <div class="col-md-3 form-check">{{ form.is_contador }} {{ form.is_contador.label_tag }}</div>
+            </div>
+            <div class="mt-3">
+              <button type="submit" class="btn btn-success">Salvar</button>
+              <a href="{% url 'cadastros:parceiros_lista' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

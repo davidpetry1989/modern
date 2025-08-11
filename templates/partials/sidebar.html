@@ -1061,6 +1061,22 @@
                             </div>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarCadastros" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCadastros">
+                                <i class="ri-building-4-line"></i> <span data-key="t-cadastros">Cadastros</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarCadastros">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{% url 'cadastros:empresas_lista' %}" class="nav-link" data-key="t-empresas">Empresas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'cadastros:parceiros_lista' %}" class="nav-link" data-key="t-parceiros">Parceiros de Negócios</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
                     </ul>
                 </div>
                 <!-- Sidebar -->
