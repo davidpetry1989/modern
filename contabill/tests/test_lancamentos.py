@@ -184,3 +184,34 @@ class LancamentoTests(TestCase):
         RateioLancamentoItemCentroCusto.objects.create(lancamento_item=item_c, centro_custo=self.cc, valor=Decimal("100"))
         lanc.validar()
 
+    def test_incluir_itens_incremental(self):
+        lanc = self.criar_lancamento()
+        item_d = LancamentoItem.objects.create(
+            lancamento=lanc,
+            conta_contabil=self.conta_d,
+            filial=self.filial,
+            moeda=self.moeda,
+            valor=Decimal("100"),
+            tipo_dc="D",
+            historico=self.historico,
+        )
+        RateioLancamentoItemCentroCusto.objects.create(
+            lancamento_item=item_d, centro_custo=self.cc, valor=Decimal("100")
+        )
+        with self.assertRaises(ValidationError):
+            lanc.validar()
+        item_c = LancamentoItem.objects.create(
+            lancamento=lanc,
+            conta_contabil=self.conta_c,
+            filial=self.filial,
+            moeda=self.moeda,
+            valor=Decimal("100"),
+            tipo_dc="C",
+            historico=self.historico,
+        )
+        RateioLancamentoItemCentroCusto.objects.create(
+            lancamento_item=item_c, centro_custo=self.cc, valor=Decimal("100")
+        )
+        lanc.validar()
+
+

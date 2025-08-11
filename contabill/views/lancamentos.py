@@ -41,6 +41,12 @@ class LancamentoContabilCreateView(LoginRequiredMixin, CreateView):
             self.object = form.save()
             itens_formset.instance = self.object
             itens_formset.save()
+            try:
+                self.object.validar()
+            except ValidationError as exc:
+                form.add_error(None, exc)
+                transaction.set_rollback(True)
+                return self.form_invalid(form)
             self.object.validar()
         messages.success(self.request, "Lançamento salvo com sucesso.")
         return super().form_valid(form)

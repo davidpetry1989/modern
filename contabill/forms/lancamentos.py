@@ -67,6 +67,15 @@ class LancamentoItemForm(forms.ModelForm):
 
 class BaseLancamentoItemFormSet(BaseInlineFormSet):
     def clean(self):
+        """Permite inclusão incremental de itens.
+
+        O balanceamento de débitos e créditos é validado no
+        momento da gravação do lançamento completo, através do método
+        ``LancamentoContabil.validar``. Aqui executamos apenas a limpeza
+        padrão para não bloquear a adição de novas linhas enquanto o
+        total de débitos e créditos ainda não estiver fechado."""
+
+
         super().clean()
         total_d = Decimal("0.00")
         total_c = Decimal("0.00")

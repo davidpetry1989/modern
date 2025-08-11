@@ -1,3 +1,73 @@
+{% extends 'partials/base.html' %}
+{% block content %}
+<div class="container">
+  <h1 class="mb-4">Lançamento</h1>
+  <form method="post" id="lancamento-form">
+    {% csrf_token %}
+    <div class="row g-3 mb-4">
+      {{ form.as_p }}
+    </div>
+    {{ itens_formset.management_form }}
+    <div id="itens">
+      {% for f in itens_formset %}
+        <div class="row g-2 align-items-end item-form mb-2">
+          <div class="col">{{ f.conta_contabil }}</div>
+          <div class="col">{{ f.historico }}</div>
+          <div class="col">{{ f.moeda }}</div>
+          <div class="col">
+            {{ f.valor }}
+          </div>
+          <div class="col">{{ f.tipo_dc }}</div>
+          <div class="col">{{ f.filial }}</div>
+          <div class="col">{{ f.codigo_externo }}</div>
+          <div class="col-auto">
+            {% if f.instance.pk %}
+              <label class="form-check-label">Excluir {{ f.DELETE }}</label>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="row mt-3">
+      <div class="col">Total Débito: <span id="total-debito">0.00</span></div>
+      <div class="col">Total Crédito: <span id="total-credito">0.00</span></div>
+      <div class="col">Diferença: <span id="diferenca">0.00</span></div>
+    </div>
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary" id="save-btn" disabled>Salvar</button>
+    </div>
+  </form>
+</div>
+<script>
+function updateTotals() {
+  let totalD = 0.0;
+  let totalC = 0.0;
+  document.querySelectorAll('#itens .item-form').forEach(function(row) {
+    const tipo = row.querySelector('select[name$="tipo_dc"]').value;
+    const valor = parseFloat(row.querySelector('input[name$="valor"]').value.replace(',', '.')) || 0;
+    if (tipo === 'D') {
+      totalD += valor;
+    } else if (tipo === 'C') {
+      totalC += valor;
+    }
+  });
+  document.getElementById('total-debito').textContent = totalD.toFixed(2);
+  document.getElementById('total-credito').textContent = totalC.toFixed(2);
+  const diff = (totalD - totalC).toFixed(2);
+  document.getElementById('diferenca').textContent = diff;
+  document.getElementById('save-btn').disabled = diff != 0;
+}
+
+document.addEventListener('input', function(e) {
+  if (e.target.name && (e.target.name.endsWith('valor') || e.target.name.endsWith('tipo_dc'))) {
+    updateTotals();
+  }
+});
+
+updateTotals();
+</script>
+{% endblock %}
+=======
 {% extends "partials/base.html" %}
 {% load static %}
 {% block title %}Lançamento{% endblock title %}
