@@ -4,16 +4,20 @@ import re
 
 
 def validar_cnpj(cnpj: str) -> bool:
-    cnpj = re.sub(r"\D", "", cnpj)
-    if len(cnpj) != 14 or cnpj in {c * 14 for c in "0123456789"}:
+    cnpj = re.sub(r"\D", "", cnpj or "")
+    if len(cnpj) != 14 or cnpj == cnpj[0] * 14:
         return False
-    def calc_digit(digits):
-        s = sum(int(d) * w for d, w in zip(digits, [5,4,3,2,9,8,7,6,5,4,3,2]))
+
+    def dv(nums, pesos):
+        s = sum(int(n) * p for n, p in zip(nums, pesos))
         r = s % 11
-        return '0' if r < 2 else str(11 - r)
-    dv1 = calc_digit(cnpj[:12])
-    dv2 = calc_digit(cnpj[:12] + dv1)
-    return cnpj[-2:] == dv1 + dv2
+        return "0" if r < 2 else str(11 - r)
+
+    d1 = dv(cnpj[:12], [5,4,3,2,9,8,7,6,5,4,3,2])
+    d2 = dv(cnpj[:12] + d1, [6,5,4,3,2,9,8,7,6,5,4,3,2])
+
+    return cnpj.endswith(d1 + d2)
+
 
 
 class EmpresaForm(forms.ModelForm):
