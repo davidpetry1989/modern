@@ -40,6 +40,9 @@ from .views.lancamentos import (
     LancamentoContabilUpdateView,
     LancamentoContabilDeleteView,
     RecalcularSaldoView,
+    LancamentoItemCreateView,
+    RateioCentroCustoView,
+    RateioProjetoView,
 )
 
 app_name = "contabill"
@@ -101,5 +104,30 @@ urlpatterns = [
         "lancamentos/recalcular-saldo/",
         RecalcularSaldoView.as_view(),
         name="lancamentos_recalcular_saldo",
+    ),
+    path(
+        "lancamentos/item/novo/",
+        LancamentoItemCreateView.as_view(),
+        name="lancamentos_item_create",
+    ),
+    path(
+        "lancamentos/rateio-cc/",
+        RateioCentroCustoView.as_view(),
+        name="lancamentos_rateio_cc",
+    ),
+    path(
+        "lancamentos/rateio-cc/salvar/",
+        RateioCentroCustoView.as_view(),
+        name="lancamentos_rateio_cc_save",
+    ),
+    path(
+        "lancamentos/rateio-projeto/",
+        RateioProjetoView.as_view(),
+        name="lancamentos_rateio_projeto",
+    ),
+    path(
+        "lancamentos/rateio-projeto/salvar/",
+        RateioProjetoView.as_view(),
+        name="lancamentos_rateio_projeto_save",
     ),
 ]

@@ -12,7 +12,10 @@ venv/
 db.sqlite3
 media/
 staticfiles/
-static/
+static/*
+!static/contabill/
+!static/contabill/js/
+!static/contabill/js/lancamentos.js
 
 # Env & IDE
 .env

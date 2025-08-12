@@ -1,0 +1,33 @@
+{% if formset %}
+<form hx-post="{% url 'contabill:lancamentos_rateio_projeto_save' %}" hx-target="#grid-projeto" hx-swap="outerHTML">
+  <input type="hidden" name="item" value="{{ item.id }}">
+  {{ formset.management_form }}
+  <table class="table table-sm table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Projeto</th>
+        <th class="text-end">Valor</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in formset.forms %}
+      <tr>
+        <td>{{ f.projeto }}{% for error in f.projeto.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</td>
+        <td>{{ f.valor }}{% for error in f.valor.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</td>
+        <td>{% if f.instance.pk %}<input type="checkbox" name="{{ f.prefix }}-DELETE" class="form-check-input">{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="text-end">Total:</td>
+        <td><span id="total-projeto">0,00</span></td>
+        <td><button class="btn btn-sm btn-primary">Salvar Projetos</button></td>
+      </tr>
+    </tfoot>
+  </table>
+</form>
+{% else %}
+<div class="border p-2">Selecione um item para rateio de Projeto.</div>
+{% endif %}
