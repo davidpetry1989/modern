@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.http import HttpResponseBadRequest
 
 from ..forms.lancamentos import (
     LancamentoContabilForm,
@@ -34,7 +35,7 @@ class LancamentoContabilCreateView(LoginRequiredMixin, CreateView):
         ctx = super().get_context_data(**kwargs)
         base_instance = self.object if self.object else LancamentoContabil()
         ctx["itens_formset"] = LancamentoItemFormSet(instance=base_instance, prefix="itens")
-        ctx["form_novo"] = LancamentoItemForm(prefix="novo")
+        ctx["form_novo"] = LancamentoItemForm(prefix="novo", initial={"moeda": 1, "tipo_dc": "D"})
         return ctx
 
     def form_valid(self, form):
@@ -71,43 +72,44 @@ class RecalcularSaldoView(LoginRequiredMixin, View):
         return redirect("contabill:lancamentos_lista")
 
 
-class LancamentoItemCreateView(LoginRequiredMixin, View):
+class LancamentoItemCreateHX(View):
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
-        lancamento = get_object_or_404(LancamentoContabil, pk=request.POST.get("lancamento_id"))
-        item_form = LancamentoItemForm(request.POST, prefix="novo")
-        cc_formset = RateioCentroCustoFormSet(request.POST, prefix="cc")
-        proj_formset = RateioProjetoFormSet(request.POST, prefix="projeto")
-        if item_form.is_valid() and cc_formset.is_valid() and proj_formset.is_valid():
-            item = item_form.save(commit=False)
-            item.lancamento = lancamento
-            item.filial = lancamento.filial
+        lanc_id = request.POST.get("lancamento_id")
+        if not lanc_id:
+            return HttpResponseBadRequest("lancamento_id ausente")
+        lanc = get_object_or_404(LancamentoContabil, pk=lanc_id)
+
+        # form de inserção rápida usa prefixo "novo"
+        form_novo = LancamentoItemForm(request.POST, prefix="novo")
+        if form_novo.is_valid():
+            item = form_novo.save(commit=False)
+            item.lancamento = lanc
+            item.filial = lanc.filial  # herdado do cabeçalho (não mostrar no detalhe)
             item.save()
-            cc_formset.instance = item
-            proj_formset.instance = item
-            cc_formset.save()
-            proj_formset.save()
-            try:
-                item.validar_rateios()
-            except ValidationError as exc:
-                item.delete()
-                item_form.add_error(None, exc)
-        itens_formset = LancamentoItemFormSet(instance=lancamento, prefix="itens")
-        context = {"formset": itens_formset, "form_novo": item_form if item_form.errors else LancamentoItemForm(prefix="novo")}
-        response = render(request, "contabill/lancamentos/_grid_itens.html", context)
-        if item_form.errors or cc_formset.non_form_errors() or proj_formset.non_form_errors():
-            response.status_code = 400
-        return response
+            # (se houver validações de CC/Projeto nesta etapa, manter)
+
+            itens_formset = LancamentoItemFormSet(instance=lanc, prefix="itens")
+            form_novo = LancamentoItemForm(prefix="novo", initial={"moeda": 1, "tipo_dc": "D"})
+        else:
+            itens_formset = LancamentoItemFormSet(instance=lanc, prefix="itens")
+
+        return render(
+            request,
+            "contabill/lancamentos/_grid_itens.html",
+            {"formset": itens_formset, "form_novo": form_novo},
+        )
 
 
 class RateioCentroCustoView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         item = get_object_or_404(LancamentoItem, pk=request.GET.get("item"))
-        formset = RateioCentroCustoFormSet(instance=item, prefix="cc")
+        formset = RateioCentroCustoFormSet(instance=item, prefix=f"cc-{item.pk}")
         return render(request, "contabill/lancamentos/_grid_cc.html", {"formset": formset, "item": item})
 
     def post(self, request, *args, **kwargs):
         item = get_object_or_404(LancamentoItem, pk=request.POST.get("item"))
-        formset = RateioCentroCustoFormSet(request.POST, instance=item, prefix="cc")
+        formset = RateioCentroCustoFormSet(request.POST, instance=item, prefix=f"cc-{item.pk}")
         if formset.is_valid():
             formset.save()
         return render(request, "contabill/lancamentos/_grid_cc.html", {"formset": formset, "item": item})
@@ -116,12 +118,12 @@ class RateioCentroCustoView(LoginRequiredMixin, View):
 class RateioProjetoView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         item = get_object_or_404(LancamentoItem, pk=request.GET.get("item"))
-        formset = RateioProjetoFormSet(instance=item, prefix="projeto")
+        formset = RateioProjetoFormSet(instance=item, prefix=f"prj-{item.pk}")
         return render(request, "contabill/lancamentos/_grid_projeto.html", {"formset": formset, "item": item})
 
     def post(self, request, *args, **kwargs):
         item = get_object_or_404(LancamentoItem, pk=request.POST.get("item"))
-        formset = RateioProjetoFormSet(request.POST, instance=item, prefix="projeto")
+        formset = RateioProjetoFormSet(request.POST, instance=item, prefix=f"prj-{item.pk}")
         if formset.is_valid():
             formset.save()
         return render(request, "contabill/lancamentos/_grid_projeto.html", {"formset": formset, "item": item})

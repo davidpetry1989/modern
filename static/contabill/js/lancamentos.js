@@ -38,14 +38,11 @@
       });
     });
   }
-  document.addEventListener('htmx:afterSwap', function(ev){
-    if(ev.detail.target.id === 'grid-itens'){
-      bindRows();
-      recalc();
-    }
-  });
-  document.addEventListener('DOMContentLoaded', function(){
+  window.recalcLancamentos = function(){
     bindRows();
     recalc();
+  };
+  document.addEventListener('DOMContentLoaded', function(){
+    window.recalcLancamentos();
   });
 })();

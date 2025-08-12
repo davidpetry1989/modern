@@ -1,5 +1,5 @@
 {% if formset %}
-<form hx-post="{% url 'contabill:lancamentos_rateio_projeto_save' %}" hx-target="#grid-projeto" hx-swap="outerHTML">
+<form id="form-projeto" hx-post="{% url 'contabill:lancamentos_rateio_projeto_save' %}" hx-target="#grid-projeto" hx-swap="outerHTML">
   <input type="hidden" name="item" value="{{ item.id }}">
   {{ formset.management_form }}
   <table class="table table-sm table-hover align-middle">

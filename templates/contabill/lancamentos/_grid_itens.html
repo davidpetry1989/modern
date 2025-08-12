@@ -22,30 +22,38 @@
     {% empty %}
     <tr><td colspan="6" class="text-center">Nenhum item adicionado.</td></tr>
     {% endfor %}
-    <tr id="linha-nova" hx-post="{% url 'contabill:lancamentos_item_create' %}" hx-target="#grid-itens" hx-swap="outerHTML" hx-include="#linha-nova, #grid-cc form, #grid-projeto form">
+    <tr id="linha-nova">
       <td>
         {{ form_novo.conta_contabil }}
-        {% for error in form_novo.conta_contabil.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+        {% for e in form_novo.conta_contabil.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
       </td>
       <td>
         {{ form_novo.historico }}
-        {% for error in form_novo.historico.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+        {% for e in form_novo.historico.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
       </td>
       <td>
         {{ form_novo.moeda }}
-        {% for error in form_novo.moeda.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+        {% for e in form_novo.moeda.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
       </td>
       <td>
         {{ form_novo.tipo_dc }}
-        {% for error in form_novo.tipo_dc.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+        {% for e in form_novo.tipo_dc.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
       </td>
       <td>
         {{ form_novo.valor }}
-        {% for error in form_novo.valor.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+        {% for e in form_novo.valor.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
       </td>
-      <td>
+      <td class="text-end">
         <input type="hidden" name="lancamento_id" value="{{ formset.instance.pk }}">
-        <button class="btn btn-sm btn-primary">Adicionar</button>
+        <button
+          type="button"
+          class="btn btn-sm btn-primary"
+          hx-post="{% url 'contabill:lancamentos_item_create' %}"
+          hx-target="#grid-itens"
+          hx-swap="innerHTML"
+          hx-include="#linha-nova, #form-cc, #form-projeto, input[name='csrfmiddlewaretoken']">
+          Adicionar
+        </button>
       </td>
     </tr>
   </tbody>
