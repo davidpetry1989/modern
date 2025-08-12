@@ -65,26 +65,35 @@
               {% endif %}
             </div>
             <hr class="my-4">
-            <div id="grid-itens" data-url-cc="{% url 'contabill:lancamentos_rateio_cc' %}" data-url-projeto="{% url 'contabill:lancamentos_rateio_projeto' %}" hx-swap="outerHTML">
+            <div id="grid-itens"
+                 data-url-cc="{% url 'contabill:lancamentos_rateio_cc' %}"
+                 data-url-projeto="{% url 'contabill:lancamentos_rateio_projeto' %}">
               {% include "contabill/lancamentos/_grid_itens.html" with formset=itens_formset form_novo=form_novo %}
-            </div>
-            <div class="row mt-4">
-              <div class="col-md-6" id="grid-cc" hx-swap="outerHTML">
-                {% include "contabill/lancamentos/_grid_cc.html" with formset=None %}
-              </div>
-              <div class="col-md-6" id="grid-projeto" hx-swap="outerHTML">
-                {% include "contabill/lancamentos/_grid_projeto.html" with formset=None %}
-              </div>
             </div>
             <div class="mt-3">
               <button type="submit" class="btn btn-success" id="btn-salvar" disabled>Salvar</button>
               <a href="{% url 'contabill:lancamentos_lista' %}" class="btn btn-secondary">Cancelar</a>
             </div>
           </form>
+          <div class="row mt-4">
+            <div class="col-md-6" id="grid-cc" hx-swap="outerHTML">
+              {% include "contabill/lancamentos/_grid_cc.html" with formset=None %}
+            </div>
+            <div class="col-md-6" id="grid-projeto" hx-swap="outerHTML">
+              {% include "contabill/lancamentos/_grid_projeto.html" with formset=None %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 <script src="{% static 'contabill/js/lancamentos.js' %}"></script>
+<script>
+document.body.addEventListener("htmx:afterSwap", function (evt) {
+  if (evt.target.id === "grid-itens" && typeof window.recalcLancamentos === "function") {
+    window.recalcLancamentos();
+  }
+});
+</script>
 {% endblock content %}

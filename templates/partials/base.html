@@ -68,6 +68,15 @@
     <script src="{% static 'js/app.js'%}"></script>
     {% endblock javascript %}
 
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script>
+      // Envia o CSRF em todos os hx-requests
+      document.body.addEventListener("htmx:configRequest", function (evt) {
+        const t = document.querySelector('input[name="csrfmiddlewaretoken"]');
+        if (t) evt.detail.headers["X-CSRFToken"] = t.value;
+      });
+    </script>
+
 </body>
 
 </html>

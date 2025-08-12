@@ -40,7 +40,7 @@ from .views.lancamentos import (
     LancamentoContabilUpdateView,
     LancamentoContabilDeleteView,
     RecalcularSaldoView,
-    LancamentoItemCreateView,
+    LancamentoItemCreateHX,
     RateioCentroCustoView,
     RateioProjetoView,
 )
@@ -107,7 +107,7 @@ urlpatterns = [
     ),
     path(
         "lancamentos/item/novo/",
-        LancamentoItemCreateView.as_view(),
+        LancamentoItemCreateHX.as_view(),
         name="lancamentos_item_create",
     ),
     path(
