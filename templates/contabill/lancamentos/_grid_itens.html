@@ -1,0 +1,62 @@
+<table class="table table-striped table-hover align-middle">
+  <thead class="table-light">
+    <tr>
+      <th>Conta</th>
+      <th>Histórico</th>
+      <th>Moeda</th>
+      <th>Tipo</th>
+      <th class="text-end">Valor</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="itens-body">
+    {% for f in formset.forms %}
+    <tr data-item-id="{{ f.instance.pk }}" data-tipo="{{ f.instance.tipo_dc }}" data-valor="{{ f.instance.valor }}" class="item-row">
+      <td>{{ f.instance.conta_contabil }}</td>
+      <td>{{ f.instance.historico }}</td>
+      <td>{{ f.instance.moeda }}</td>
+      <td>{{ f.instance.get_tipo_dc_display }}</td>
+      <td class="text-end">{{ f.instance.valor }}</td>
+      <td></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6" class="text-center">Nenhum item adicionado.</td></tr>
+    {% endfor %}
+    <tr id="linha-nova" hx-post="{% url 'contabill:lancamentos_item_create' %}" hx-target="#grid-itens" hx-swap="outerHTML" hx-include="#linha-nova, #grid-cc form, #grid-projeto form">
+      <td>
+        {{ form_novo.conta_contabil }}
+        {% for error in form_novo.conta_contabil.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+      </td>
+      <td>
+        {{ form_novo.historico }}
+        {% for error in form_novo.historico.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+      </td>
+      <td>
+        {{ form_novo.moeda }}
+        {% for error in form_novo.moeda.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+      </td>
+      <td>
+        {{ form_novo.tipo_dc }}
+        {% for error in form_novo.tipo_dc.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+      </td>
+      <td>
+        {{ form_novo.valor }}
+        {% for error in form_novo.valor.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+      </td>
+      <td>
+        <input type="hidden" name="lancamento_id" value="{{ formset.instance.pk }}">
+        <button class="btn btn-sm btn-primary">Adicionar</button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="2" class="text-end">Total Débito:</th>
+      <th colspan="1"><span id="total-debito">0,00</span></th>
+      <th colspan="1" class="text-end">Total Crédito:</th>
+      <th colspan="1"><span id="total-credito">0,00</span></th>
+      <th colspan="1" class="text-end">Diferença:</th>
+      <th colspan="1"><span id="total-diferenca">0,00</span></th>
+    </tr>
+  </tfoot>
+</table>
